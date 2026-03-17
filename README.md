@@ -4,13 +4,13 @@ Custom [Claude Code](https://claude.com/claude-code) slash commands for managing
 
 ## Setup
 
-Copy the `claude-commands/` folder into your `~/.claude/commands/` directory:
+Clone directly into your Claude Code commands directory:
 
 ```bash
-cp claude-commands/*.md ~/.claude/commands/
+git clone git@github.com:stex2005/claude-code-workflow.git ~/.claude/commands/claude-code-workflow
 ```
 
-The commands will be available as slash commands in Claude Code (e.g. `/commit-stack`, `/create-pr-stack`).
+Claude Code automatically discovers `.md` files in subdirectories of `~/.claude/commands/`, so all commands will be available immediately (e.g. `/commit-stack`, `/create-pr-stack`).
 
 ## Commands
 
