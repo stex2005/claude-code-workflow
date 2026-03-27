@@ -1,5 +1,5 @@
 ---
-description: Generate a text summary of the entire step stack — goals, repos, changes, status, and features per step.
+description: Generate or update a text summary of the entire step stack — goals, repos, changes, status, risks, and features per step.
 allowed-tools: Bash(git *), Bash(gh *), Bash(ls *), Bash(for *), Bash(cd *), Read, Write, Edit, Glob, Grep
 ---
 
@@ -13,9 +13,15 @@ allowed-tools: Bash(git *), Bash(gh *), Bash(ls *), Bash(for *), Bash(cd *), Rea
 
 ## Your task
 
-Generate a structured text summary of the entire PR stack across all repos.
+Generate or update a structured text summary of the entire PR stack across all repos. If a summary file already exists, update it in place; otherwise create it from scratch.
 
-### Step 0: Gather data
+### Step 0: Check for existing summary
+
+1. If the user provided a file path argument, check if it exists.
+2. Otherwise, check for `docs/stack-summary.md` in the workspace.
+3. If found, read it — you will update it in Step 2. If not found, you will create it fresh.
+
+### Step 1: Gather data
 
 1. Scan all repos for step branches using `*/step*`:
    ```bash
@@ -31,9 +37,9 @@ Generate a structured text summary of the entire PR stack across all repos.
    - PR status: `gh pr list --head <branch> --json number,state,url`
 3. Read the plan files from `~/.claude/plans/` to get step goals and status.
 
-### Step 1: Generate the summary
+### Step 2: Generate or update the summary
 
-For each step (sorted by step number), output the following template:
+For each step (sorted by step number), use the following template:
 
 ```markdown
 ## Step <N>: <slug>
@@ -51,7 +57,15 @@ For each step (sorted by step number), output the following template:
 
 - <concrete feature or behavior that was added/changed>
 - <concrete feature or behavior that was added/changed>
+
+**Main risks:**
+
+- <risk or concern about this step's changes — e.g., untested edge cases, API breaking changes, concurrency issues, assumptions that may not hold>
 - ...
+
+**Notes:**
+
+- <any additional context, caveats, or follow-up items>
 ```
 
 Guidelines for each section:
@@ -59,10 +73,20 @@ Guidelines for each section:
 - **Status**: Check plan status field AND PR state. Combine them (e.g., "in-progress, PR #142 open").
 - **Repos and changes**: One bullet per repo that has this step branch. Summarize what that repo's changes do — not file counts, but the actual substance.
 - **Features implemented**: List the concrete capabilities or behaviors that this step delivers. Read the actual code changes to determine this — don't just rephrase commit messages. Focus on what a user or developer would notice.
+- **Main risks**: Identify risks by reading the actual code changes. Look for: untested paths, breaking API changes, race conditions, hardcoded assumptions, missing error handling, or integration risks across repos. If a step is low-risk, say so briefly rather than omitting the section.
+- **Notes**: Optional. Only include if there are meaningful caveats, follow-ups, or context not captured elsewhere.
 
-### Step 2: Output
+#### When updating an existing summary
 
-1. Write the summary to a file. If the user provided an output path argument, use it. Otherwise use `docs/stack-summary.md`.
+- **Preserve** existing wording in sections where nothing changed — don't rewrite unnecessarily.
+- **Update** status, repos/changes, features, and risks for steps that have new commits.
+- **Add** new steps that weren't in the previous summary.
+- **Keep** steps whose branches were fully merged and cleaned up, but mark status as "merged and cleaned up".
+- After updating, call out what changed: which steps were updated, which are new, which were completed.
+
+### Step 3: Output
+
+1. Write or update the summary file. If the user provided an output path argument, use it. Otherwise use `docs/stack-summary.md`.
 2. Print the full summary to the console so the user can copy-paste it directly into Confluence. The markdown format used above (headers, bold, bullet lists) pastes cleanly into Confluence's editor.
 
 ## Rules

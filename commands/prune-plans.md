@@ -1,14 +1,14 @@
 ---
-description: Analyze all existing plans (built-in and superpowers) and prune obsolete/superseded/irrelevant ones. Asks permission before deleting.
+description: Analyze all existing plans and prune obsolete/superseded/irrelevant ones. Asks permission before deleting.
 allowed-tools: Bash(ls:*), Bash(rm:*), Bash(find:*), Bash(wc:*), Read, Glob, Grep
 ---
 
 ## Context
 
-- Plans directory: `~/.claude/plans/`
-- Superpowers plans: `~/.claude/plugins/cache/claude-plugins-official/superpowers/*/docs/superpowers/plans/`
-- Superpowers specs: `~/.claude/plugins/cache/claude-plugins-official/superpowers/*/docs/superpowers/specs/`
-- Arguments: $ARGUMENTS (optional: "all", "plans", "specs", or a specific filename)
+- Primary plans directory: `docs/superpowers/plans/` (in current repo)
+- Legacy plans directory: `~/.claude/plans/` (old built-in plan format)
+- Superpowers specs: `docs/superpowers/specs/` (in current repo)
+- Arguments: $ARGUMENTS (optional: "all", "plans", "specs", "legacy", or a specific filename)
 
 ## Your task
 
@@ -16,9 +16,10 @@ Analyze all saved plans and specs, identify which are obsolete, and ask the user
 
 ### Step 1: Discover all plan files
 
-1. List all `.md` files in `~/.claude/plans/` (flat files and directories with numbered sub-files).
-2. List all `.md` files in the superpowers plans and specs directories.
-3. Report the total count per location.
+1. List all `.md` files in `docs/superpowers/plans/` (current superpowers plans).
+2. List all `.md` files in `docs/superpowers/specs/` (specs).
+3. List all files in `~/.claude/plans/` (legacy plans — flag these as candidates for cleanup).
+4. Report the total count per location.
 
 ### Step 2: Read and classify each plan
 

@@ -1,16 +1,18 @@
-# Claude Code Workflow
+# dot-claude
 
-Custom [Claude Code](https://claude.com/claude-code) slash commands for managing stacked PRs and multi-repo refactoring workflows.
+Custom [Claude Code](https://claude.com/claude-code) slash commands for development workflows — stacked PRs, code review, issue management, planning, and more.
+
+Based on [tomzx/dot-claude](https://github.com/tomzx/dot-claude).
 
 ## Setup
 
-Clone directly into your Claude Code commands directory:
-
 ```bash
-git clone git@github.com:stex2005/claude-code-workflow.git ~/.claude/commands/claude-code-workflow
+git clone git@github.com:stex2005/dot-claude.git ~/.dot-claude
+cd ~/.dot-claude
+./install.sh
 ```
 
-Claude Code automatically discovers `.md` files in subdirectories of `~/.claude/commands/`, so all commands will be available immediately (e.g. `/stack-commit`, `/stack-create-pr`).
+This copies commands to `~/.claude/commands/` and scripts to `~/.claude/scripts/`.
 
 ## Commands
 
@@ -18,10 +20,9 @@ Claude Code automatically discovers `.md` files in subdirectories of `~/.claude/
 | Command | Description |
 |---|---|
 | `/stack-commit` | Classify changes against the plan, commit to the correct step branch, auto-advance |
-| `/stack-create-pr` | Create PRs for all steps or a single step across repos, with cross-references. Retarget after merges. |
-| `/stack-create-diagram` | Visualize the PR stack across repos as a draw.io matrix diagram |
-| `/stack-create-summary` | Generate a text summary of the stack — goals, repos, changes, status, and features per step |
-| `/stack-update-summary` | Update an existing stack summary with latest changes and status |
+| `/stack-create-pr` | Create PRs for all steps or a single step across repos, with cross-references and stack/cross-repo tables. Retarget after merges |
+| `/stack-create-diagram` | Visualize the PR stack as a draw.io matrix diagram (supports forks) |
+| `/stack-create-summary` | Generate or update a text summary of the stack — goals, repos, changes, status, risks, and features |
 | `/stack-status` | Dashboard of step branches, PRs, and plan status per repo |
 | `/stack-rebase` | Rebase the full chain of step branches when the base moves |
 | `/stack-checkout` | Check out a specific step branch across all repos |
@@ -32,14 +33,33 @@ Claude Code automatically discovers `.md` files in subdirectories of `~/.claude/
 | `/start-plan` | Break work into numbered phases before starting |
 | `/save-plan` | Persist the current plan to disk |
 | `/resume-plan` | Pick up where you left off on a saved plan |
+| `/prune-plans` | Analyze and clean up stale plans |
 
-### General
+### Code review & PRs
 | Command | Description |
 |---|---|
+| `/pr-review` | Comprehensive code review of a GitHub PR |
+| `/address-pr-comments` | Review and address PR comments with user approval per comment |
+| `/handle-pr-comment` | Reply to a specific PR comment, implement or explain rejection |
 | `/commit` | Lint, format, and commit changes on the current branch |
-| `/create-pr` | Create a single PR for the current branch |
-| `/create-diagram` | Create a draw.io XML diagram |
+| `/rebase` | Rebase current feature branch on default branch and push |
 
-## Git flow
+### Issues
+| Command | Description |
+|---|---|
+| `/create-issue` | Create a GitHub issue with background, acceptance criteria, and time budget |
+| `/prepare-issue` | Analyze an issue, assess info sufficiency, create implementation plan |
+| `/handle-issue-comment` | Reply to an issue comment using codebase context |
+| `/label-issue` | Auto-label an issue based on its description |
 
-See [stacked-pr-workflow.md](stacked-pr-workflow.md) for the full stacked PR strategy.
+### Documentation & specs
+| Command | Description |
+|---|---|
+| `/directory-to-spec` | Convert a directory's code into specification files |
+| `/spec-review` | Review a spec for ambiguities, inconsistencies, missing info |
+| `/divio-documentation` | Generate docs following the Divio/Diataxis system |
+| `/create-diagram` | Create a draw.io XML diagram from code or description |
+
+## License
+
+MIT. See [LICENSE](LICENSE).
