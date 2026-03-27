@@ -12,7 +12,7 @@ cd ~/.dot-claude
 ./install.sh
 ```
 
-This copies commands to `~/.claude/commands/` and scripts to `~/.claude/scripts/`.
+This copies commands to `~/.claude/commands/`.
 
 ## Commands
 

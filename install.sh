@@ -2,13 +2,10 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET_CMD="$HOME/.claude/commands"
-TARGET_SCRIPTS="$HOME/.claude/scripts"
+TARGET_DIR="$HOME/.claude/commands"
 
-mkdir -p "$TARGET_CMD" "$TARGET_SCRIPTS"
+mkdir -p "$TARGET_DIR"
 
-cp -f "$SCRIPT_DIR"/commands/*.md "$TARGET_CMD/"
-cp -f "$SCRIPT_DIR"/scripts/* "$TARGET_SCRIPTS/"
+cp -f "$SCRIPT_DIR"/commands/*.md "$TARGET_DIR/"
 
-echo "Installed dot-claude commands to $TARGET_CMD"
-echo "Installed dot-claude scripts to $TARGET_SCRIPTS"
+echo "Installed dot-claude commands to $TARGET_DIR"
