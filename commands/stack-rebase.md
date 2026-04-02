@@ -48,11 +48,13 @@ All subsequent commands MUST run inside the resolved repo directory.
 Process each step branch sequentially, bottom to top:
 
 ```
-git checkout <prefix>/step1-<slug> && git rebase <base-branch>
+git checkout <prefix>/step1-<slug> && git rebase origin/<base-branch>
 git checkout <prefix>/step2-<slug> && git rebase <prefix>/step1-<slug>
 git checkout <prefix>/step3-<slug> && git rebase <prefix>/step2-<slug>
 ...
 ```
+
+**Always rebase the first step on `origin/<base-branch>`**, not the local ref — the local ref may be stale.
 
 **If a rebase conflict occurs:**
 1. **Stop immediately.**
@@ -105,3 +107,5 @@ Pushed: yes / no (awaiting confirmation)
 - If a conflict occurs, **stop and report**. Do not auto-resolve.
 - Always ask before pushing force-updated branches.
 - Return to the user's original branch when done.
+- Always `git fetch origin` before rebasing. Never rebase on a local branch ref — always use `origin/<base-branch>` to avoid stale references.
+- When squashing commits, first rebase on `origin/<base-branch>`, then `git reset --soft HEAD~N` (where N = number of commits on the branch). **Never use `git reset --soft <branch-name>`**.

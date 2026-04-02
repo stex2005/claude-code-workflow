@@ -69,3 +69,5 @@ Dropped commits (if any): <list>
 - NEVER use `git push --force`. Always use `--force-with-lease`.
 - If the working tree is not clean, **refuse to proceed**.
 - If a conflict occurs, **stop and report**. Do not auto-resolve.
+- Always `git fetch origin` before rebasing. Never rebase on a local branch ref — always use `origin/<base-branch>` to avoid stale references.
+- When squashing commits during a rebase, first rebase on `origin/<base-branch>`, then `git reset --soft HEAD~N` (where N = number of commits on the branch). **Never use `git reset --soft <branch-name>`** — if the local ref is stale, unrelated changes from other merged PRs will contaminate the squash.
