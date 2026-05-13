@@ -83,14 +83,24 @@ For each repo+branch that needs a PR:
 
 1. Read the plan file for the step from `~/.claude/plans/` to understand the scope.
 2. Collect existing PRs for other steps in the same repo (for the stack table) and for the same step in other repos (for the cross-repo table).
-3. For each repo, generate a PR description following the repo's PULL_REQUEST_TEMPLATE if available. Otherwise:
-   - **Overview**: What this step accomplishes (from the plan), scoped to this repo's changes.
-   - **Stack position**: "Step N of M — targets `<base-branch>`"
-   - **Summary of Changes**: Bullet list of main changes.
-   - **Testing**: How to test this step.
-   - **PR stack** (always): Table of all step PRs in this repo, showing where this PR sits in the chain. Use `#number` for PRs in the same repo:
+3. Generate a concise PR description. Keep it short — reviewers' time is limited. Use exactly these five sections in this order:
+
+   - **Overview** — 1–3 sentences, **non-technical**. What problem does this PR solve? Why does it exist? Should be readable by someone unfamiliar with the codebase.
+   - **Summary of Changes** — bullet list, technical but not overwhelming. 3–7 bullets ideal. File-level granularity, not line-by-line.
+   - **Test plan** — simple bullet list of how to verify the change. Build command + test command + key smoke check. Skip the boilerplate.
+   - **Cross-repo PRs** (always when the step spans multiple repos) — table linking to the same step's PRs in other repos. Use `org/repo#number` format so GitHub auto-links:
      ```markdown
-     ## PR stack
+     ## Cross-repo PRs
+
+     | Repo | PR | Status |
+     |------|----|--------|
+     | **common** | **org/common#142 (this PR)** | **open** |
+     | hal | org/hal_repo#87 | open |
+     | sim | org/sim_repo#203 | open |
+     ```
+   - **Stacked PRs** (always) — table of all step PRs in this repo, showing where this PR sits in the chain. Use `#number` for same-repo refs:
+     ```markdown
+     ## Stacked PRs
 
      | Step | PR | Status |
      |------|----|--------|
@@ -99,18 +109,8 @@ For each repo+branch that needs a PR:
      | Step 3: planning logic | #145 | open |
      ```
      Include all steps that have PRs. Bold the current step's row. Steps without PRs yet can be listed as `(not created)`.
-   - **Cross-repo PRs** (only when this step has PRs in multiple repos): Table linking to the same step's PRs in other repos. Use `org/repo#number` format:
-     ```markdown
-     ## Cross-repo PRs
 
-     This change spans multiple repositories:
-
-     | Repo | PR | Status |
-     |------|----|--------|
-     | **common** | **#142 (this PR)** | **open** |
-     | hal | org/hal_repo#87 | open |
-     | sim | org/sim_repo#203 | open |
-     ```
+   If the repo has a PULL_REQUEST_TEMPLATE, fold the five sections above into its slots where possible (e.g. map "Overview" + "Summary of Changes" into the template's narrative slot, "Test plan" into Testing). Skip the template's Author Checklist or other boilerplate that doesn't add value to the reader.
 4. Write the description to `pr-description.md` in the repo root.
 5. Present all descriptions to the user for review. Wait for confirmation before proceeding.
 
